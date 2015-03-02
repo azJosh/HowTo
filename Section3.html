@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<!--[if lt IE 8 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 8)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+
+   <!--- Basic Page Needs
+   ================================================== -->
+	<meta charset="utf-8">
+	<title>Section 3: Item Search Function</title>
+	<meta name="section2" content="">
+	<meta name="Joshua Peeples" content="">
+
+	<!-- CSS
+   ================================================== -->
+	<link rel="stylesheet" href="css/base.css">
+	<link rel="stylesheet" href="css/layout.css">
+
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+</head>
+
+<body>
+
+   <div id="content-wrap">
+
+      <!-- Header
+      ================================================== -->
+      <header class="container">
+
+         
+            <h1><a href="index.html">How-To Guide</a></h1>
+            <h1><a href="index.html">for the Amazon Product Advertising API</a></h1>
+            <h3>by Joshua Peeples</h3>
+         
+
+
+         <nav id="nav-wrap" class="cf">
+
+            <ul id="menu">
+	             <li><a href="#">In This Guide</a>
+                  <ul>
+                    <li><a href="index.html"><span>- </span>Introduction</a></li>
+                    <li><a href="Section1.html"><span>- </span>Section 1: Get Your Access Keys</a></li>
+                    <li><a href="Section2.html"><span>- </span>Section 2: Download the PHP SOAP Library</a></li>
+                    <li><a href="Section3.html"><span>- </span>Section 3: Item Search Function</a></li>
+                    <li><a href="Section4.html"><span>- </span>Section 4: Item Lookup Function</a></li>
+                    
+                  </ul>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="example.html">Example Website</a></li>
+               </li>
+	            
+            </ul> <!-- end #menu -->
+
+         </nav>
+
+      </header>
+
+       <!-- content
+      ================================================== -->
+      <div id="content" class="container">
+
+         <div id="title-section">
+
+            <h2>Section 3: Item Search Function</h2>
+            <p>I find this function to be the most useful in this library. You can allow the user to provide a search term and you can use this function to 
+                return the top ten results from Amazon. This is a powerful tool for your website or blog. The product list will always be up to date, because 
+                the Search Function looks the products up each time it is used. <br<br>          
+                
+                I will demonstrate how to use this function by setting up a book search.
+            </p>
+
+         </div>
+
+         <div class="container">
+
+            <div>
+
+                <h3>Your Access Keys</h3>
+
+                <p>
+                    Create variables for your access keys:
+                </p>
+                    <pre>
+                        <code>
+$public_key = 'Access_Key_ID';
+$private_key = ‘Secret_Access_Key ';
+$associate_tag = 'Tracking_ID';
+//Replace Access_Key_ID, Secret_Access_Key, and Tracking_ID with your actual keys and IDs. 
+                        </code>
+                    </pre>
+                
+                <h3>Create the object</h3>
+                <p>
+                    We are using the AmazonECS class from the AmazonECS.class.php file. We will create a new AmazonECS object using its _constructor 
+                <a href="http://php.net/manual/en/language.oop5.decon.php">(Click here for more information on constructors in PHP).</a><br><br>              
+                    The constructor looks like this:
+                    <pre>
+                        <code>
+                        
+__construct($accessKey, $secretKey, $country, $associateTag)
+
+                        </code>
+                    </pre>
+                The $country parameter will select the Amazon website we want our results from. If we chose ‘co.uk’ we will get results 
+                from Amazon.co.uk. The possible values for $country are de, com, co.uk, ca, fr, co.jp, it, cn, and es. For this guide we 
+                will be using ‘com’ to return results from the USA site Amazon.com.  For the other three parameters we will use the variables we created above. 
+                <br><br>
+                We create an object and name it $amazonECS:
+                   <pre>
+                        <code>
+                        
+$amazonEcs = new AmazonECS($public_key, $private_key, 'com', $associate_tag);
+
+                        </code>
+                    </pre>
+                
+                </p>
+                <h3>Setting the Response Group</h3>
+                <p>
+                    Amazon has many Response Groups you can choose from. Each group returns different set of information. You can see all of the
+                    Response Groups that are available by <a href="http://docs.aws.amazon.com/AWSECommerceService/latest/DG/CHAP_ResponseGroupsList.html">clicking this link.</a><br><br>
+                    
+                    The Small Response Group returns an object that looks like this:
+                  
+                    <br><br><img src="http://web.engr.oregonstate.edu/~peeplesj/HowTo/HowTo/img_3_a.PNG" alt="response groups"><br><br>
+                     We will use the responseGroup() function from the library to set the Response Group to Small:
+                    <pre>
+                        <code>
+                        
+$amazonEcs->responseGroup('Small');
+
+                        </code>
+                    </pre>
+                </p>
+                <h3>Setting the Category</h3>
+                <p>
+                    Here are some categories to search on the United States site (Amazon.com) are:<br>
+                    All<br>
+                    Apparel<br>
+                    Appliances<br>
+                    Baby<br>
+                    Beauty<br>
+                    Books<br>
+                    DVD<br>
+                    Fashion<br><br>
+                    You can see the complete list by going here:<br>
+                     <a href="http://docs.aws.amazon.com/AWSECommerceService/latest/DG/LocaleUS.html">http://docs.aws.amazon.com/AWSECommerceService/latest/DG/LocaleUS.html</a><br><br>
+                    For our Book Search website we will be using the Books category. We will use the category() function from the library:
+                    <pre>
+                        <code>
+                        
+$amazonEcs->category('Books');
+
+                        </code>
+                    </pre>
+                </p>
+                <h3>Search Function</h3>
+                <p>
+                    We will create a variable called $mySearch and set it to the search term we want to use. To search for a php book, we will set $mySearch to php:
+                    <pre>
+                        <code>
+                        
+$mySearch = php;
+
+                        </code>
+                    </pre>
+                    We will create a variable called $response to store the return data and set it equal to the search() function:
+                    <pre>
+                        <code>
+                        
+$response = $amazonEcs->search($mySearch);
+
+                        </code>
+                    </pre>
+                 </p>
+                <h3>Using var_dump</h3>
+                <p>
+                    You can use the PHP function var_dump() to view the response data:
+                    <pre>
+                        <code>
+                        
+var_dump($response);
+
+                        </code>
+                    </pre>
+                    If you would like to see the data in JSON you can do the following:
+                    <pre>
+                        <code>
+                        
+echo json_encode($response, 128);
+
+                        </code>
+                    </pre>
+                </p>
+                <h3>Viewing the Search Results</h3>
+                <p>
+                    Using var_dump() is a great way to test your code or debug, but it is not a great way for the user to view their search results. 
+                    Let’s use a for loop to print them:
+                  
+                    <pre>
+                        <code>
+                        
+for ($y = 0; $y < 10; $y++) {
+    $result = $y + 1;
+    echo "Title: " . $response->Items->Item[$y]->ItemAttributes->Title . "<br>";
+    echo "Author: " . $response->Items->Item[$y]->ItemAttributes->Author . "<br>";
+    echo "ASIN: " . $response->Items->Item[$y]->ASIN . "<br>";
+}
+                        </code>
+                    </pre>
+            
+            
+            
+                    Let’s also show the MoreSearchResultsUrl, so the user can view all of the results on the Amazon.com website:
+                    <br><br><img src="img_3_b.PNG" alt="MoreSearchResultsUrl"><br><br>
+      
+                </p>
+                <h3>Here is all of our code put together from this section</h3>
+                 <br><br><img src="img_3_c.PNG" alt="section3code"><br><br>
+
+                 
+                
+                <a href="http://web.engr.oregonstate.edu/~peeplesj/HowTo/HowTo/Section2.html">
+                <button>Previous: Section 2: Download the PHP SOAP Library</button></a> 
+                 <a href="http://web.engr.oregonstate.edu/~peeplesj/HowTo/HowTo/Section4.html">
+                <button>Next: Section 4: Item Lookup Function</button></a> 
+
+            
+                
+
+            </div>
+
+           
+      <!-- footer-bottom
+      ================================================== -->
+      <div id="footer-bottom" class="grid12 first">
+
+	      <p>
+           Design by <a href="http://www.styleshout.com/">styleshout</a>
+         </p>
+
+         <!-- Back To Top Button -->
+         <div id="go-top"><a href="#" title="Back to Top">Go To Top</a></div>
+
+      </div>
+
+   </footer>
+
+   <!-- Java Script
+   ================================================== -->
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+   <script>window.jQuery || document.write('<script src="js/jquery-1.10.2.min.js"><\/script>')</script>
+
+   <script src="js/custom.js"></script>
+
+</body>
+
+</html>

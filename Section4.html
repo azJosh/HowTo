@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<!--[if lt IE 8 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 8)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+
+   <!--- Basic Page Needs
+   ================================================== -->
+	<meta charset="utf-8">
+	<title>Section 4: ItemLookup Function</title>
+	<meta name="section4" content="">
+	<meta name="Joshua Peeples" content="">
+
+	<!-- CSS
+   ================================================== -->
+	<link rel="stylesheet" href="css/base.css">
+	<link rel="stylesheet" href="css/layout.css">
+
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+</head>
+
+<body>
+
+   <div id="content-wrap">
+
+      <!-- Header
+      ================================================== -->
+      <header class="container">
+
+         
+            <h1><a href="index.html">How-To Guide</a></h1>
+            <h1><a href="index.html">for the Amazon Product Advertising API</a></h1>
+            <h3>by Joshua Peeples</h3>
+         
+
+
+         <nav id="nav-wrap" class="cf">
+
+            <ul id="menu">
+	             <li><a href="#">In This Guide</a>
+                  <ul>
+                    <li><a href="index.html"><span>- </span>Introduction</a></li>
+                    <li><a href="Section1.html"><span>- </span>Section 1: Get Your Access Keys</a></li>
+                    <li><a href="Section2.html"><span>- </span>Section 2: Download the PHP SOAP Library</a></li>
+                    <li><a href="Section3.html"><span>- </span>Section 3: ItemSearch Function</a></li>
+                    <li><a href="Section4.html"><span>- </span>Section 4: ItemLookup Function</a></li>
+                    
+                  </ul>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="example.html">Example Website</a></li>
+               </li>
+	            
+            </ul> <!-- end #menu -->
+
+         </nav>
+
+      </header>
+
+       <!-- content
+      ================================================== -->
+      <div id="content" class="container">
+
+         <div id="title-section">
+
+            <h2>Section 4: ItemLookup Function</h2>
+            <p>The Item Lookup Function is similar to the Item Search, but it looks up only a single product. Amazon uses an identifier called an ASIN 
+                (Amazon Standard Inventory Number) to identify an Amazon product listing page. This Look Up Function will look up the ASIN 
+                and return information about the product from the listing page. This function would be useful if you wanted to create links to specific 
+                products on your blog or website.
+            </p>
+
+         </div>
+
+         <div class="container">
+
+            <div>
+
+               <h3>Create an $amazonEcs object:</h3>
+                <pre>
+                        <code>
+$amazonEcs = new AmazonECS($public_key, $private_key, 'com', $associate_tag);
+                        </code>
+                    </pre>
+                <h3>Create look up Variable</h3>
+                <p>
+                  Create a variable for the ASIN and set it to and ASIN. For this example I will use the ASIN B00KAOCZ7C:
+                </p>
+                <pre>
+                    <code>
+$myASIN = B00KAOCZ7C;
+                    </code>
+                </pre>
+                <h3>Set Response Group</h3>
+                <p>
+                    To set the Response Group we will use the responseGroup() function from the library. For this example we will use the Small Response Group from Section 3:
+                </p>
+                 <pre>
+                    <code>
+$amazonEcs->responeGroup(‘small’);
+                    </code>
+                </pre>
+                <h3>Set Category</h3>
+                <p>
+                    To set the category we will use the category() function from the library:
+                </p>
+                 <pre>
+                    <code>
+$amazonEcs->category('Books');
+                    </code>
+                </pre>
+                <h3>Response</h3>
+                <p>
+                    We will create a variable called $response to store the return data and set it equal to the lookup() function:
+                </p>
+                <pre>
+                    <code>
+$response = $amazonEcs->lookup($myASIN);
+                    </code>
+                </pre>
+                <h3>Returned Data</h3>
+                <p>
+                    To show the returned data we will create echo statements:
+                </p>
+                <br><br><img src="img_4_c.PNG" alt="lookupResponse"><br><br>
+                <h3>Error handling:</h3>
+                <p>
+                    The most common errors with using either the search or look up functions is a bad access key, associate tag, or country parameter. 
+                    I found that using a try block was the best method to handle these errors. Below is all of the code for this section using a try block:
+                    (<a href="http://php.net/manual/en/language.exceptions.php">(Click here for more information on try and catch).</a>
+                </p>
+                <br><br><img src="img_4_a.PNG" alt="Section4 Code"><br><br>
+                
+                <p>
+                    Here is the code from Section 3 using a try block:
+                </p>
+                <br><br><img src="img_4_b.PNG" alt="Section4 Code"><br><br>
+                
+                 <a href="http://web.engr.oregonstate.edu/~peeplesj/HowTo/HowTo/Section3.html">
+                <button>Previous: Section 3: Item Search Function</button></a> 
+                
+                <a href="http://web.engr.oregonstate.edu/~peeplesj/HowTo/HowTo/resources.html">
+                <button>Resources</button></a> 
+                
+                <a href="http://web.engr.oregonstate.edu/~peeplesj/HowTo/HowTo/example.html">
+                <button>Example Website</button></a> 
+                
+                
+
+            </div>
+
+           
+      <!-- footer-bottom
+      ================================================== -->
+      <div id="footer-bottom" class="grid12 first">
+
+	      <p>
+           Design by <a href="http://www.styleshout.com/">styleshout</a>
+         </p>
+
+         <!-- Back To Top Button -->
+         <div id="go-top"><a href="#" title="Back to Top">Go To Top</a></div>
+
+      </div>
+
+   </footer>
+
+   <!-- Java Script
+   ================================================== -->
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+   <script>window.jQuery || document.write('<script src="js/jquery-1.10.2.min.js"><\/script>')</script>
+
+   <script src="js/custom.js"></script>
+
+</body>
+
+</html>
